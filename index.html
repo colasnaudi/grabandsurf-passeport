@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0B2533" />
+<title>korko-01 · Passeport Grab&amp;Surf</title>
+<link rel="icon" href="logo.png" type="image/png" />
+<style>
+  @font-face { font-family: 'Outfit'; font-weight: 400; font-display: swap; src: url('fonts/Outfit_400Regular.ttf') format('truetype'); }
+  @font-face { font-family: 'Outfit'; font-weight: 500 700; font-display: swap; src: url('fonts/Outfit_700Bold.ttf') format('truetype'); }
+  @font-face { font-family: 'Outfit'; font-weight: 800 900; font-display: swap; src: url('fonts/Outfit_800ExtraBold.ttf') format('truetype'); }
+  @font-face { font-family: 'Kaushan Script'; font-weight: 400; font-display: swap; src: url('fonts/KaushanScript_400Regular.ttf') format('truetype'); }
+
+  :root {
+    --navy: #0B2533; --ocean: #1BA8C8; --ocean-700: #11748B; --lagoon: #3FBED9;
+    --foam-200: #D6EFF6; --sun: #F7B32B;
+    --bg: hsl(192 60% 97%); --fg: hsl(201 65% 12%); --muted: hsl(192 45% 95%);
+    --muted-fg: hsl(199 22% 38%); --border: hsl(193 40% 89%);
+    --shadow: 0 1px 2px rgba(11,37,51,.04), 0 8px 24px -12px rgba(11,37,51,.12);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { min-height: 100dvh; background: var(--bg); color: var(--fg); font-family: 'Outfit', system-ui, sans-serif;
+         -webkit-font-smoothing: antialiased; padding-bottom: 64px; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 28rem; margin: 0 auto; padding: 0 16px; }
+
+  header { background: var(--navy); color: #fff; }
+  .top { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; }
+  .top img { height: 48px; }
+  .langs { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.1); }
+  .langs span { width: 34px; height: 34px; border-radius: 999px; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: rgba(255,255,255,.6); }
+  .langs span.on { background: #fff; color: var(--navy); }
+  .title { padding-top: 20px; padding-bottom: 8px; }
+  .kicker { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--lagoon); }
+  h1 { margin-top: 4px; font-family: 'Kaushan Script', cursive; font-weight: 400; font-size: 60px; line-height: 1.25; color: var(--sun); }
+  .meta { margin-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; }
+  .meta .sub { color: rgba(255,255,255,.7); }
+  .status { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 700; background: var(--ocean); color: #fff; }
+  .status::before { content: ''; width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+  .waves { display: block; width: 100%; height: 40px; }
+
+  main { display: grid; gap: 16px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .stat { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 12px; text-align: center; box-shadow: var(--shadow); }
+  .stat b { display: block; font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .stat small { font-size: 12px; color: var(--muted-fg); }
+
+  .amb { overflow: hidden; border-radius: 24px; background: var(--navy); color: #fff; box-shadow: var(--shadow); }
+  .amb .photo { aspect-ratio: 5 / 4; width: 100%; object-fit: cover; display: block; }
+  .amb .share { margin: 16px 20px 0; width: calc(100% - 40px); }
+  .amb .placeholder { aspect-ratio: 5 / 4; display: grid; place-items: center; background: rgba(255,255,255,.06);
+                      color: rgba(255,255,255,.5); font-size: 14px; border-bottom: 1px dashed rgba(255,255,255,.2); }
+  .amb .body { padding: 20px; }
+  .amb .name { margin-top: 4px; font-size: 24px; font-weight: 800; }
+  .amb .tag { font-size: 14px; color: rgba(255,255,255,.7); }
+
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 24px; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .card h2 { font-size: 20px; font-weight: 800; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600; background: var(--muted); color: var(--muted-fg); }
+  .chip.ok { background: rgba(27,168,200,.15); color: var(--ocean-700); font-size: 11px; }
+  .desc { margin-top: 6px; font-size: 14px; color: var(--muted-fg); }
+  .sync { margin-top: 20px; border-radius: 12px; background: var(--muted); padding: 8px 12px; font-size: 12px; color: var(--muted-fg); }
+  ol { list-style: none; position: relative; margin-top: 20px; padding-left: 20px; border-left: 2px solid var(--foam-200); display: grid; gap: 20px; }
+  li { position: relative; }
+  li .dot { position: absolute; left: -29px; top: 4px; width: 14px; height: 14px; border-radius: 999px; border: 3px solid #fff; background: var(--ocean); }
+  .row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .row b { font-weight: 700; }
+  .row small, .note { font-size: 12px; color: var(--muted-fg); }
+  .line { margin-top: 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .tx { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--ocean-700); }
+  .tx:hover, .registry:hover { text-decoration: underline; }
+  .note { margin-top: 4px; }
+  .registry { margin-top: 20px; display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; color: var(--ocean-700); }
+  .more { margin-top: 20px; width: 100%; border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 10px; font: inherit; font-weight: 700; color: var(--fg); cursor: pointer; }
+  .more[hidden] { display: none; }
+
+  .share { width: 100%; height: 48px; border: 0; border-radius: 999px; background: var(--sun); color: var(--navy);
+           font: inherit; font-size: 16px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+  .share:active { transform: scale(.99); }
+  svg.i { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <img src="logo.png" alt="Grab&amp;Surf" />
+    <div class="langs" aria-hidden="true"><span class="on">FR</span><span>EN</span><span>ES</span></div>
+  </div>
+  <div class="wrap title">
+    <div class="kicker">Passeport de planche</div>
+    <h1>korko-01</h1>
+    <div class="meta">
+      <span class="status">au rack</span>
+      <span class="sub">Liège des Landes · base A · NFT n°1</span>
+    </div>
+  </div>
+  <svg class="waves" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,40 C240,80 480,0 720,30 C960,60 1200,10 1440,40 L1440,90 L0,90 Z" fill="#1BA8C8" opacity=".55" />
+    <path d="M0,60 C260,30 520,90 760,60 C1000,30 1220,80 1440,55 L1440,90 L0,90 Z" fill="hsl(192 60% 97%)" />
+  </svg>
+</header>
+
+<main class="wrap">
+  <div class="stats">
+    <div class="stat"><b>127</b><small>sessions</small></div>
+    <div class="stat"><b>1062</b><small>minutes surfées</small></div>
+    <div class="stat"><b>12000</b><small>réparations</small></div>
+  </div>
+
+  <section class="amb">
+    <!-- Photo de l'ambassadeur : déposer le fichier photo.jpg à côté de cette page. -->
+    <img class="photo" src="photo.jpg" alt="Clément Roseyro"
+         onerror="this.outerHTML='&lt;div class=&quot;placeholder&quot;&gt;Photo à venir (photo.jpg)&lt;/div&gt;'" />
+    <button class="share" id="share" type="button">
+      <svg class="i" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+      <span>Partager la photo</span>
+    </button>
+    <div class="body">
+      <div class="kicker">Son ambassadrice ou ambassadeur</div>
+      <div class="name">Franck Dupont</div>
+      <div class="tag">A surfé cette planche</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Son carnet de vie</h2>
+      <span class="chip">Avalanche Fuji</span>
+    </div>
+    <p class="desc">Chaque étape est inscrite dans un registre public : elle ne peut plus être modifiée, seulement corrigée par une nouvelle entrée.</p>
+    <p class="sync">Historique lu directement sur la chaîne.</p>
+    <ol id="log"></ol>
+    <button class="more" id="more" type="button">Voir tout le carnet</button>
+    <a class="registry" href="https://testnet.snowtrace.io/address/0x1A3f999DC10eaA90676f9cF907049C511A5C1903" target="_blank" rel="noreferrer">
+      Voir le registre sur Snowtrace
+      <svg class="i" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+    </a>
+  </section>
+
+</main>
+
+<script>
+  // korko-01's real events on the Fuji contract 0x1A3f...1903, newest first (read on 25/09/2026).
+  // type, station, t (station flow time, s), transaction, session length (s) for a return.
+  const EVENTS = [
+    ["RETOUR", "A", 2347, "0x701c4109241c151d0b02f552c78e2f6b870308ada9416359ca3e6adec16cb394", 380],
+    ["DEPART", "A", 1967, "0x28c8739961c8fa78b1674000e055bac9ed8bdef4ff3e8f21a2c5a932932a2731", null],
+    ["RETOUR", "A", 1896, "0x1b5cf6e6f439dcb87ad3698a7a46ceb019ddcee54a2d3307b492458aec3be7a5", 227],
+    ["DEPART", "A", 1669, "0xf9844ce81266b5b06898e71ae0198b4d57941033acd202307befd728cc4ac4c1", null],
+    ["RETOUR", "A", 504, "0x373d8f02fe164193ae32f51974cdb0b7d28a03e01a5e7d59bd78121405f784f0", 467],
+    ["DEPART", "A", 37, "0x6040687715d84eecf9ee444f6548c79c4cd52217fa8e972c86e739933757fb9f", null],
+    ["RETOUR", "A", 2266, "0x4d8ef48b4e3e9c015de7e7d25ed3adc58f3d5dfc03f0899ff92bfa9cf1d123dc", 35],
+    ["DEPART", "A", 2231, "0x34588e77248640860a20ac500bbad37484675ed197ce771851852344e02ee890", null],
+    ["RETOUR", "A", 1792, "0x9edfdda537324af70b8ef93b6b1284da434c6a7da18871a7454cee569b8f5c04", 19],
+    ["DEPART", "A", 1773, "0x63de94a381b2096d6a5561d5c488e3c9adf4083b5ed8652f3275ae344e4baa79", null],
+    ["RETOUR", "A", 1395, "0x643264ea48c553ee8b4e7032a55b9d5ee41cca632ed6f92bbd80b04e9cb0678e", 89],
+    ["DEPART", "A", 1306, "0xb06c09e2b3006c78bad6df3dccec71d80a82c35c89997698d87d65213fabd1ee", null],
+    ["RETOUR", "A", 1247, "0xca58c8a393e3b49a1aa3ca2a5f07729f18ad5d98e4cb598992814ae96ef51ba9", null],
+    ["DEPART", "A", 1257, "0xb30d220aceec487522c8d660cb8a89277e3a49a4d09bd73f3b2c5d265f845faf", null],
+    ["RETOUR", "A", 883, "0xe0a9ab850a09502c6a8b7dc527fd625d3029f9849db590d85e96d84c72179d5f", null],
+    ["DEPART", "A", 893, "0xa1ceeff1824d8d393adb89f3eb183bf0ac9b8a7b5b697e6b2f0522c480f7139b", null],
+    ["RETOUR", "A", 1411, "0xe20eb8601996051a4d2108d62169a4568364b4144a8542d1373fb82f02236438", 87],
+    ["DEPART", "A", 1324, "0xc32686ec699cbd29c71d58d814d462c79304027d216659dc42b927c84e6e6a45", null],
+    ["RETOUR", "A", 432, "0x0ae67a9862f98f7df8bf4a6a22db5ca2de69eb64a3126df5c4653229b287a2b3", 169],
+    ["DEPART", "A", 263, "0x9f7a7ec76bcd7ef946f2d58976b8211832c8864b4a4f0a8db158bc42e7b9eb26", null],
+    ["RETOUR", "A", 848, "0x48a23b54c8aed6e35c0528b245d085087fc79edca3fd929a941d07ba971e7a6e", 415],
+    ["DEPART", "A", 433, "0x2d06130d5041b83980f44c8ba4af08e7695ef1a017b0b1db32f3db616673efa1", null],
+    ["RETOUR", "A", 1682, "0x6e7f55d2bd163ac20b43813d9122897b1e855d2512af3909ad543ef6058eafe8", 234],
+    ["DEPART", "A", 1448, "0xaaaf53bc6c8790aae6f8d2a11c1363ca8d4945a70f7fcd6093159a13b60a6e78", null],
+    ["RETOUR", "A", 1076, "0x82932aa57f30320d71a06a65098b5422f1fa44f44907061dff1bef1d4f4b4021", 385],
+    ["DEPART", "A", 691, "0xdb84267a978e579a2167a4ef4308b6b6e86ca10bb5eb7ee0d019c85f72cff904", null],
+    ["DEPART", "A", 59518, "0xf54ced7403e7d2891bd698541f0b126bb4a9fbb17e9d2a2254c7483b47f74014", null],
+    ["RETOUR", "A", 59507, "0x942af37536d472bc70a7cb324bfe734eafed0a0faaddc6fad8349d3a8d7e2a23", null],
+    ["DEPART", "A", 59507, "0x98f8edb2ba8cd4e9d3dcf4a6ab4481a291111d1ea970e5c1973618392468b34c", null],
+    ["RETOUR", "A", 1283, "0xeb1417f8220489e28c4343226f6ace6243ae4eedcd13bf3b48b3bb92f6b18ee8", 472],
+    ["DEPART", "A", 811, "0x9c4491d03ad2bc69566177b2a759e7cbc4e97efa00fc7ae20ca23d338e8f3a6c", null],
+    ["RETOUR", "A", 832, "0xe540e3d15ba8af7ca98bb2a52dff470a8a78f7d39ed51bb9b2a6a6cdae6500a4", 743],
+    ["DEPART", "A", 89, "0xb404d1bd6c658866a8589d0ea8b21f04d4ef13f35428fe575f82c10e83e9bf71", null],
+    ["MISE_EN_SERVICE", "A", 0, "0x2117add167fc6ace7f0b0c65d7df4c5fc90d4ce1222e0c8f629d917ef83adae1", null],
+  ];
+  const LABELS = { DEPART: 'Départ', RETOUR: 'Retour au rack', MISE_EN_SERVICE: 'Mise en service' };
+  const duration = (s) => s < 3600 ? `${Math.max(1, Math.round(s / 60))} min`
+    : `${Math.floor(s / 3600)} h ${String(Math.floor((s % 3600) / 60)).padStart(2, '0')}`;
+  const short = (x) => `${x.slice(0, 8)}…${x.slice(-4)}`;
+  const check = '<svg class="i" style="width:12px;height:12px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+
+  const row = ([type, station, t, tx, dur]) => `<li><span class="dot"></span>
+      <div class="row"><b>${LABELS[type] || type}</b><small>station ${station} · t = ${t} s</small></div>
+      <div class="line"><span class="chip ok">${check}vérifié sur la chaîne</span>
+        <a class="tx" href="https://testnet.snowtrace.io/tx/${tx}" target="_blank" rel="noreferrer">${short(tx)}</a></div>
+      ${dur ? `<div class="note">session de ${duration(dur)}</div>` : ''}</li>`;
+
+  const log = document.getElementById('log');
+  const more = document.getElementById('more');
+  const render = (n) => { log.innerHTML = EVENTS.slice(0, n).map(row).join(''); more.hidden = n >= EVENTS.length; };
+  render(6);
+  more.addEventListener('click', () => render(EVENTS.length));
+
+  document.getElementById('share').addEventListener('click', async () => {
+    const buttonLabel = document.querySelector('#share span');
+    const text = "Découvrez la photo de l'ambassadeur de korko-01, planche de surf en liège Grab&Surf.";
+    try {
+      const response = await fetch('photo.jpg');
+      const blob = await response.blob();
+      const photo = new File([blob], 'grabandsurf-photo.jpg', { type: blob.type || 'image/jpeg' });
+      if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [photo] }))) {
+        await navigator.share({ title: 'Grab&Surf', text, files: [photo] });
+      } else if (navigator.share) {
+        await navigator.share({ title: 'Grab&Surf', text, url: location.href });
+      } else {
+        await navigator.clipboard.writeText(`${text} ${location.href}`);
+        buttonLabel.textContent = 'Lien copié';
+      }
+    } catch { /* closed */ }
+  });
+</script>
+</body>
+</html>
